@@ -1,1 +1,1 @@
-Rails.application.config.session_store :cookie_store, key: "_pilot_session"
+Rails.application.config.session_store :cookie_store, key: '_pilot_session'
