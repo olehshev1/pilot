@@ -7,6 +7,8 @@ gem "pg", "~> 1.1"
 gem "dotenv-rails", ">= 3.1.1"
 gem "puma", ">= 5.0"
 gem "bootsnap", require: false
+gem "devise", "~> 4.9"
+gem "simple_token_authentication", "~> 1.18"
 
 group :development do
   gem "brakeman", "7.0.0"
