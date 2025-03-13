@@ -21,6 +21,16 @@ group :development do
 end
 
 group :test do
-  gem "rspec", "3.4.0"
+  gem "rspec", "~> 3.10"
   gem "simplecov", "0.21.2", require: false
 end
+
+gem "bullet"
+gem "rspec-rails", "~> 5.0"
+gem "rubocop-rails"
+gem "shoulda-matchers"
+gem "database_consistency", require: false
+gem "listen"
+gem "factory_bot_rails"
+gem "rails-controller-testing"
+gem "rspec_junit_formatter"
