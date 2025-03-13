@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :users, only: [ :create ]
       post 'sign_in', to: 'sessions#create'
       get 'me', to: 'users#me'
+      resources :projects
     end
   end
 end

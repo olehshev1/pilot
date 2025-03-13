@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :project do
     name { "Sample Project" }
-    description { "This is a sample project description" }
+    description { "This is a sample project description that meets the minimum length requirement" }
     association :user
 
     trait :with_tasks do
