@@ -39,8 +39,33 @@ Your task is to provide a link to your Git repository with the project and instr
 
 ## Setup:
 - overcommit --sign
+- cp .env.example .env
+- bundle install
+- rails db:setup
+- rails s -p 3000
 
 ## Usage
-- ruby index.rb
-- rspec spec/
+
+## Compose usage
+```
+docker compose run app rails db:create
+docker compose run app rails db:environment:set RAILS_ENV=development
+
+docker compose run app rake db:create
+docker compose run app rake db:drop
+docker compose run app rake db:schema:load
+docker compose run app rake db:seed
+
+docker exec -it pilot-app-1 rails g migration description_of_change
+docker exec -it pilot-app-1 rails db:migrate
+docker exec -it pilot-app-1 rails db:rollback
+
+docker compose run app bundle update
+docker compose run app bundle
+
+docker exec -it pilot-app-1 rails c #console
+docker attach pilot-app-1 #debug
+docker exec -it pilot-app-1 rspec #test
+docker exec -it pilot-app-1 /bin/bash #cli
+```
 
