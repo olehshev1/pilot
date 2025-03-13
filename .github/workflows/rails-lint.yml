@@ -1,0 +1,40 @@
+name: Ruby CI
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        ruby-version: [3.3.6]
+
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+
+      - name: Install Gems
+        run: bundle install
+
+      - name: Run Security Checks
+        run: |
+          bundle exec bundler-audit --update
+          bundle exec brakeman -q -w2
+
+      - name: Run Fasterer
+        run: bundle exec fasterer
+
+      - name: Run Rubocop
+        run: bundle exec rubocop --parallel
+
+      - name: Run RSpec
+        run: bundle exec rspec
