@@ -4,7 +4,6 @@ SimpleCov.start do
   minimum_coverage_by_file 70
   add_filter '/spec/'
 end
-require_relative '../app/loader'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

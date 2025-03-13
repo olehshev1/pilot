@@ -1,4 +1,4 @@
-name: Ruby CI
+name: Rails CI
 
 on:
   workflow_dispatch:
@@ -8,6 +8,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-22.04
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     strategy:
       matrix:
@@ -22,8 +35,21 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
 
+      - name: Install PostgreSQL Dependencies
+        run: sudo apt-get update && sudo apt-get install -y libpq-dev
+
       - name: Install Gems
         run: bundle install
+
+      - name: Set Up Database
+        run: |
+          cp config/database.github-actions.yml config/database.yml
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+          bundle exec rake db:schema:load
+          bundle exec rake db:seed
+        env:
+          RAILS_ENV: test
 
       - name: Run Security Checks
         run: |
