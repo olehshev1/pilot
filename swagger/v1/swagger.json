@@ -1,0 +1,236 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Pilot API",
+    "version": "v1",
+    "description": "API documentation for Pilot application"
+  },
+  "components": {
+    "securitySchemes": {
+      "x_auth_token": {
+        "type": "apiKey",
+        "name": "X-User-Token",
+        "in": "header"
+      },
+      "x_auth_email": {
+        "type": "apiKey",
+        "name": "X-User-Email",
+        "in": "header"
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/sessions": {
+      "post": {
+        "summary": "Creates a session",
+        "tags": [
+          "Sessions"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "session created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "authentication_token": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "email"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "post": {
+        "summary": "Creates a user",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "user created",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "message": "User created successfully",
+                  "data": {
+                    "user_id": 191,
+                    "email": "user@example.com",
+                    "authentication_token": "gvQxHH57JM1bGxxomqsh"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "authentication_token": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "email"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "invalid request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "error",
+                  "message": "User could not be created",
+                  "errors": [
+                    "Email is invalid",
+                    "Password confirmation doesn't match Password",
+                    "Password is too short (minimum is 6 characters)"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string",
+                        "example": "user@example.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example": "password"
+                      },
+                      "password_confirmation": {
+                        "type": "string",
+                        "example": "password"
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "password",
+                      "password_confirmation"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "summary": "Retrieves the current user profile",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "x_auth_token": [],
+            "x_auth_email": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile retrieved",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "message": "User profile",
+                  "data": {
+                    "user_id": 192,
+                    "email": "user@example.com"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "PILOT server"
+    }
+  ]
+}

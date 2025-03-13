@@ -9,6 +9,8 @@ gem 'puma', '>= 5.0'
 gem 'bootsnap', require: false
 gem 'devise', '~> 4.9'
 gem 'simple_token_authentication', '~> 1.18'
+gem 'rswag-api'
+gem 'rswag-ui'
 
 group :development do
   gem 'brakeman', '7.0.0'
@@ -25,6 +27,7 @@ end
 group :test do
   gem 'rspec', '~> 3.10'
   gem 'simplecov', '0.21.2', require: false
+  gem 'rswag-specs'
 end
 
 gem 'bullet'

@@ -69,3 +69,7 @@ docker exec -it pilot-app-1 rspec #test
 docker exec -it pilot-app-1 /bin/bash #cli
 ```
 
+## Documentation
+- RAILS_ENV=test bundle exec rspec spec/requests/api/v1 --format Rswag::Specs::SwaggerFormatter
+- open http://localhost:3000/api-docs/index.html
+```
