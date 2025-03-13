@@ -9,5 +9,5 @@ PreCommit:
     include: '**/*_spec.rb'
   Fasterer:
     enabled: true
-    command: [ 'bundle', 'exec', 'fasterer' ]
+    command: ['bundle', 'exec', 'fasterer']
     include: '**/*.rb'
