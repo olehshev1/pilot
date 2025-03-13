@@ -33,3 +33,14 @@ You are required to implement a simple Project Management System, allowing users
 
 ## Result:
 Your task is to provide a link to your Git repository with the project and instructions on how to run it.
+
+## Requirements:
+- ruby 3.3.6
+
+## Setup:
+- overcommit --sign
+
+## Usage
+- ruby index.rb
+- rspec spec/
+
