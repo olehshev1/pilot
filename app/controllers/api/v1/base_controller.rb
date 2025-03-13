@@ -5,15 +5,15 @@ class Api::V1::BaseController < ApplicationController
   private
 
   def authenticate_user_from_token!
-    email = request.headers["X-User-Email"]
-    token = request.headers["X-User-Token"]
+    email = request.headers['X-User-Email']
+    token = request.headers['X-User-Token']
 
     user = User.find_by(email: email)
 
     if user && Devise.secure_compare(user.authentication_token, token)
       @current_user = user
     else
-      render json: { error: "Not Authorized" }, status: :unauthorized unless @current_user
+      render json: { error: 'Not Authorized' }, status: :unauthorized unless @current_user
     end
   end
 end
