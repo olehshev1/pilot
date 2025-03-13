@@ -58,8 +58,3 @@ end
 def json_response
   JSON.parse @response.body if @response.body.present?
 end
-
-RSpec::Core::ExampleGroup.class_eval do
-  def self.fixture_path=(path)
-  end
-end

@@ -34,7 +34,6 @@ gem 'bullet'
 gem 'rspec-rails', '~> 5.0'
 gem 'rubocop-rails'
 gem 'shoulda-matchers'
-gem 'database_consistency', require: false
 gem 'listen'
 gem 'factory_bot_rails'
 gem 'rails-controller-testing'
