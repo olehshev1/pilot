@@ -6,8 +6,8 @@ class Api::V1::SessionsController < Api::V1::BaseController
 
     if user && user.valid_password?(params[:password])
       render json: {
-        status: "success",
-        message: "Signed in successfully",
+        status: 'success',
+        message: 'Signed in successfully',
         data: {
           user_id: user.id,
           email: user.email,
@@ -16,8 +16,8 @@ class Api::V1::SessionsController < Api::V1::BaseController
       }
     else
       render json: {
-        status: "error",
-        message: "Invalid email or password"
+        status: 'error',
+        message: 'Invalid email or password'
       }, status: :unauthorized
     end
   end

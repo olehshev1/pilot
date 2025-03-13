@@ -6,8 +6,8 @@ class Api::V1::UsersController < Api::V1::BaseController
 
     if @user.save
       render json: {
-        status: "success",
-        message: "User created successfully",
+        status: 'success',
+        message: 'User created successfully',
         data: {
           user_id: @user.id,
           email: @user.email,
@@ -16,8 +16,8 @@ class Api::V1::UsersController < Api::V1::BaseController
       }, status: :created
     else
       render json: {
-        status: "error",
-        message: "User could not be created",
+        status: 'error',
+        message: 'User could not be created',
         errors: @user.errors.full_messages
       }, status: :unprocessable_entity
     end
@@ -25,8 +25,8 @@ class Api::V1::UsersController < Api::V1::BaseController
 
   def me
     render json: {
-      status: "success",
-      message: "User profile",
+      status: 'success',
+      message: 'User profile',
       data: {
         user_id: current_user.id,
         email: current_user.email
