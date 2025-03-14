@@ -31,7 +31,7 @@ group :test do
 end
 
 gem 'bullet'
-gem 'rspec-rails', '~> 5.0'
+gem 'rspec-rails', '~> 7.1'
 gem 'rubocop-rails'
 gem 'shoulda-matchers'
 gem 'listen'
