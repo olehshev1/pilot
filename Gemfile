@@ -11,6 +11,7 @@ gem 'devise', '~> 4.9'
 gem 'simple_token_authentication', '~> 1.18'
 gem 'rswag-api'
 gem 'rswag-ui'
+gem 'cancancan', '~> 3.5'
 
 group :development do
   gem 'brakeman', '7.0.0'
@@ -38,3 +39,4 @@ gem 'listen'
 gem 'factory_bot_rails'
 gem 'rails-controller-testing'
 gem 'rspec_junit_formatter'
+gem 'active_model_serializers', '~> 0.10.13'
