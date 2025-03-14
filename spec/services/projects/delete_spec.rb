@@ -5,6 +5,7 @@ RSpec.describe Projects::Delete do
     context 'when project has no tasks' do
       let!(:project) { create(:project, user: user) }
       let(:service) { described_class.new(user, project) }
+
       subject { service.call }
 
       it 'deletes the project' do
@@ -20,6 +21,7 @@ RSpec.describe Projects::Delete do
       let!(:project) { create(:project, user: user) }
       let!(:task) { create(:task, project: project) }
       let(:service) { described_class.new(user, project) }
+
       subject { service.call }
 
       it 'does not delete the project' do
@@ -43,6 +45,7 @@ RSpec.describe Projects::Delete do
     context 'when project does not exist' do
       let(:non_existent_project) { double('Project', destroy: false) }
       let(:service) { described_class.new(user, non_existent_project) }
+
       subject { service.call }
 
       before do

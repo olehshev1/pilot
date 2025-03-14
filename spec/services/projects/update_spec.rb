@@ -15,6 +15,7 @@ RSpec.describe Projects::Update do
   describe '#call' do
     context 'with valid parameters' do
       let(:service) { described_class.new(user, project, valid_params) }
+
       subject { service.call }
 
       it 'updates the project' do
@@ -37,9 +38,10 @@ RSpec.describe Projects::Update do
 
     context 'with invalid parameters' do
       let(:service) { described_class.new(user, project, invalid_params) }
-      subject { service.call }
       let(:original_name) { project.name }
       let(:original_description) { project.description }
+
+      subject { service.call }
 
       it 'does not update the project' do
         service.call
