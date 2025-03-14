@@ -4,6 +4,7 @@ RSpec.describe Projects::Show do
 
   describe '#call' do
     let(:service) { described_class.new(user, project) }
+
     subject { service.call }
 
     it 'returns the project' do

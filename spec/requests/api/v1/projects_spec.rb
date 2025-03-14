@@ -5,7 +5,6 @@ RSpec.describe 'API V1 Projects', type: :request do
   let(:user) { create(:user) }
   let(:token) { user.authentication_token }
   let(:email) { user.email }
-  let(:Authorization) { "Bearer #{token}" }
 
   path '/api/v1/projects' do
     get 'Lists all projects for user' do
