@@ -21,6 +21,24 @@
   },
   "paths": {
     "/api/v1/projects": {
+      "parameters": [
+        {
+          "name": "X-User-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-User-Email",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "summary": "Lists all projects for user",
         "tags": [
@@ -32,24 +50,6 @@
             "x_auth_email": []
           }
         ],
-        "parameters": [
-          {
-            "name": "X-User-Token",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-User-Email",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "projects found",
@@ -58,31 +58,31 @@
                 "example": {
                   "data": [
                     {
-                      "id": 3503,
+                      "id": 5087,
                       "name": "Sample Project",
                       "description": "This is a sample project description that meets the minimum length requirement",
                       "user": {
-                        "id": 5233,
+                        "id": 7040,
                         "email": "test1@example.com"
                       },
                       "tasks": []
                     },
                     {
-                      "id": 3504,
+                      "id": 5088,
                       "name": "Sample Project",
                       "description": "This is a sample project description that meets the minimum length requirement",
                       "user": {
-                        "id": 5233,
+                        "id": 7040,
                         "email": "test1@example.com"
                       },
                       "tasks": []
                     },
                     {
-                      "id": 3505,
+                      "id": 5089,
                       "name": "Sample Project",
                       "description": "This is a sample project description that meets the minimum length requirement",
                       "user": {
-                        "id": 5233,
+                        "id": 7040,
                         "email": "test1@example.com"
                       },
                       "tasks": []
@@ -149,24 +149,7 @@
             "x_auth_email": []
           }
         ],
-        "parameters": [
-          {
-            "name": "X-User-Token",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-User-Email",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "description": "project created",
@@ -174,11 +157,11 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": 3506,
+                    "id": 5090,
                     "name": "Test Project",
                     "description": "This is a test description with at least 20 characters",
                     "user": {
-                      "id": 5235,
+                      "id": 7042,
                       "email": "test3@example.com"
                     },
                     "tasks": []
@@ -305,11 +288,11 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": 3507,
+                    "id": 5091,
                     "name": "Sample Project",
                     "description": "This is a sample project description that meets the minimum length requirement",
                     "user": {
-                      "id": 5237,
+                      "id": 7044,
                       "email": "test5@example.com"
                     },
                     "tasks": []
@@ -383,11 +366,11 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": 3509,
+                    "id": 5093,
                     "name": "Updated Project",
                     "description": "This is an updated description with at least 20 characters",
                     "user": {
-                      "id": 5241,
+                      "id": 7048,
                       "email": "test9@example.com"
                     },
                     "tasks": []
@@ -577,34 +560,34 @@
                 "example": {
                   "data": [
                     {
-                      "id": 1510,
+                      "id": 2365,
                       "name": "Sample Task",
                       "description": "This is a sample task description",
                       "status": "not_started",
                       "project": {
-                        "id": 3511,
+                        "id": 5095,
                         "name": "Sample Project",
                         "description": "This is a sample project description that meets the minimum length requirement"
                       }
                     },
                     {
-                      "id": 1511,
+                      "id": 2366,
                       "name": "Sample Task",
                       "description": "This is a sample task description",
                       "status": "not_started",
                       "project": {
-                        "id": 3511,
+                        "id": 5095,
                         "name": "Sample Project",
                         "description": "This is a sample project description that meets the minimum length requirement"
                       }
                     },
                     {
-                      "id": 1512,
+                      "id": 2367,
                       "name": "Sample Task",
                       "description": "This is a sample task description",
                       "status": "not_started",
                       "project": {
-                        "id": 3511,
+                        "id": 5095,
                         "name": "Sample Project",
                         "description": "This is a sample project description that meets the minimum length requirement"
                       }
@@ -656,11 +639,8 @@
               }
             }
           },
-          "401": {
-            "description": "unauthorized"
-          },
-          "403": {
-            "description": "forbidden"
+          "404": {
+            "description": "project not found"
           }
         }
       },
@@ -675,24 +655,7 @@
             "x_auth_email": []
           }
         ],
-        "parameters": [
-          {
-            "name": "X-User-Token",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-User-Email",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "description": "task created",
@@ -700,12 +663,12 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": 1513,
+                    "id": 2368,
                     "name": "Test Task",
-                    "description": "This is a test task description",
+                    "description": "This is a test task",
                     "status": "not_started",
                     "project": {
-                      "id": 3514,
+                      "id": 5096,
                       "name": "Sample Project",
                       "description": "This is a sample project description that meets the minimum length requirement"
                     }
@@ -833,7 +796,7 @@
         }
       ],
       "get": {
-        "summary": "Retrieves a task",
+        "summary": "Fetches a task",
         "tags": [
           "Tasks"
         ],
@@ -850,12 +813,12 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": 1514,
+                    "id": 2369,
                     "name": "Sample Task",
                     "description": "This is a sample task description",
                     "status": "not_started",
                     "project": {
-                      "id": 3516,
+                      "id": 5098,
                       "name": "Sample Project",
                       "description": "This is a sample project description that meets the minimum length requirement"
                     }
@@ -905,9 +868,6 @@
           },
           "404": {
             "description": "task not found"
-          },
-          "403": {
-            "description": "forbidden"
           }
         }
       },
@@ -930,12 +890,12 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": 1516,
+                    "id": 2370,
                     "name": "Updated Task",
-                    "description": "This is an updated task description",
+                    "description": "This is an updated task",
                     "status": "in_progress",
                     "project": {
-                      "id": 3519,
+                      "id": 5100,
                       "name": "Sample Project",
                       "description": "This is a sample project description that meets the minimum length requirement"
                     }
@@ -1060,9 +1020,9 @@
                   "status": "success",
                   "message": "User created successfully",
                   "data": {
-                    "user_id": 5258,
-                    "email": "new_user1741941813@example.com",
-                    "authentication_token": "4kayMNXtnXG_s2etchb9"
+                    "user_id": 7061,
+                    "email": "new_user1741945998@example.com",
+                    "authentication_token": "peycuNcbTDjxxFoMdARr"
                   }
                 },
                 "schema": {
@@ -1159,6 +1119,24 @@
             "x_auth_email": []
           }
         ],
+        "parameters": [
+          {
+            "name": "X-User-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Email",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "user profile",
@@ -1168,8 +1146,8 @@
                   "status": "success",
                   "message": "User profile",
                   "data": {
-                    "user_id": 5259,
-                    "email": "test26@example.com"
+                    "user_id": 7062,
+                    "email": "test22@example.com"
                   }
                 }
               }
