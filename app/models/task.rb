@@ -6,4 +6,6 @@ class Task < ApplicationRecord
   validates :name, presence: true
   validates :description, presence: true
   validates :status, presence: true, inclusion: { in: statuses.keys }
+  validates :project_link, presence: true
+  validates_with ProjectLinkValidator
 end

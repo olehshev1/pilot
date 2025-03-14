@@ -13,6 +13,7 @@ RSpec.describe Task, type: :model do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:description) }
     it { is_expected.to validate_presence_of(:status) }
+    it { is_expected.to validate_presence_of(:project_link) }
 
     it 'validates that status is included in the allowed values' do
       valid_statuses.each do |valid_status|
@@ -34,6 +35,27 @@ RSpec.describe Task, type: :model do
       subject.valid?
 
       expect(subject.errors[:status]).to include("can't be blank")
+    end
+
+    context 'project_link validation' do
+      let(:task) { build(:task, project_link: project_link) }
+
+      context 'when project_link is a valid URL' do
+        let(:project_link) { 'https://example.com' }
+
+        it 'is valid' do
+          expect(task).to be_valid
+        end
+      end
+
+      context 'when project_link is not a valid URL' do
+        let(:project_link) { 'not-a-url' }
+
+        it 'is not valid' do
+          expect(task).not_to be_valid
+          expect(task.errors[:project_link]).to include('must be a valid URL')
+        end
+      end
     end
   end
 

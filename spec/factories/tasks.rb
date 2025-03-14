@@ -3,6 +3,7 @@ FactoryBot.define do
     name { "Sample Task" }
     description { "This is a sample task description" }
     status { "not_started" }
+    project_link { "https://github.com/example/project" }
     association :project
 
     trait :in_progress do
@@ -11,6 +12,10 @@ FactoryBot.define do
 
     trait :completed do
       status { "completed" }
+    end
+
+    trait :invalid_project_link do
+      project_link { "invalid-url" }
     end
   end
 end

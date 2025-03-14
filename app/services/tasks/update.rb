@@ -35,7 +35,7 @@ module Tasks
     private
 
     def task_params
-      params.require(:task).permit(:name, :description, :status)
+      params.require(:task).permit(:name, :description, :status, :project_link)
     end
   end
 end

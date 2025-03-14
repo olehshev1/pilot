@@ -3,10 +3,10 @@ RSpec.describe Tasks::Create do
   let(:project) { create(:project, user: user) }
   let(:valid_params) do
     ActionController::Parameters.new({ task:
-                                         { name: "New Task", description: "Task description", status: "not_started" } })
+                                         { name: "New Task", description: "Task description", status: "not_started", project_link: "https://github.com/example/project" } })
   end
   let(:invalid_params) do
-    ActionController::Parameters.new({ task: { name: "", description: "", status: nil } })
+    ActionController::Parameters.new({ task: { name: "", description: "", status: nil, project_link: "" } })
   end
 
   describe '#call' do

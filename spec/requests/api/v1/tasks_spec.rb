@@ -50,7 +50,7 @@ RSpec.describe 'API V1 Tasks', type: :request do
         authenticate_with_token
 
         let(:task) do
-          { task: { name: 'Test Task', description: 'This is a test task', status: 'not_started' } }
+          { task: { name: 'Test Task', description: 'This is a test task', status: 'not_started', project_link: 'https://github.com/example/project' } }
         end
 
         run_test_with_example!
@@ -58,7 +58,7 @@ RSpec.describe 'API V1 Tasks', type: :request do
 
       response '422', 'invalid request' do
         authenticate_with_token
-        let(:task) { { task: { name: '', description: '', status: '' } } }
+        let(:task) { { task: { name: '', description: '', status: '', project_link: '' } } }
 
         run_test!
       end
@@ -106,7 +106,7 @@ RSpec.describe 'API V1 Tasks', type: :request do
         schema schema_data_obj(Schemas::Tasks::TASK_RESPONSE_SCHEMA)
         authenticate_with_token
         let(:task) do
-          { task: { name: 'Updated Task', description: 'This is an updated task', status: 'in_progress' } }
+          { task: { name: 'Updated Task', description: 'This is an updated task', status: 'in_progress', project_link: 'https://github.com/example/project' } }
         end
 
         run_test_with_example!
@@ -114,7 +114,7 @@ RSpec.describe 'API V1 Tasks', type: :request do
 
       response '422', 'invalid request' do
         authenticate_with_token
-        let(:task) { { task: { name: '', description: '', status: '' } } }
+        let(:task) { { task: { name: '', description: '', status: '', project_link: '' } } }
 
         run_test!
       end

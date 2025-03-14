@@ -41,10 +41,10 @@ RSpec.describe Api::V1::TasksController, type: :controller do
 
   describe '#create' do
     let(:valid_params) do
-      { task: { name: 'New Task', description: 'This is a test task description', status: 'not_started' } }
+      { task: { name: 'New Task', description: 'This is a test task description', status: 'not_started', project_link: 'https://github.com/example/project' } }
     end
     let(:invalid_params) do
-      { task: { name: '', description: '', status: 'not_started' } }
+      { task: { name: '', description: '', status: 'not_started', project_link: '' } }
     end
 
     it 'creates a new task with valid params' do
