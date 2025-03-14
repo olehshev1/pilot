@@ -4,7 +4,7 @@ class Api::V1::ProjectsController < Api::V1::BaseController
   load_and_authorize_resource
 
   def index
-    service = Projects::Index.call(current_user)
+    service = Projects::Index.call(current_user, params.permit(:task_status))
 
     render json: {
       data: ActiveModelSerializers::SerializableResource.new(

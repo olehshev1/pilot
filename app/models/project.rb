@@ -4,7 +4,7 @@ class Project < ApplicationRecord
   DESCRIPTION_MIN_LENGTH = 20
   DESCRIPTION_MAX_LENGTH = 120
 
-  belongs_to :user, counter_cache: true
+  belongs_to :user, counter_cache: true, touch: true
   has_many :tasks, dependent: :restrict_with_error
 
   validates :name, presence: true, length: { minimum: NAME_MIN_LENGTH, maximum: NAME_MAX_LENGTH }
