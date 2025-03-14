@@ -5,10 +5,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
   let(:project) { create(:project, user: user) }
 
   before do
-    request.headers['X-User-Email'] = user.email
-    request.headers['X-User-Token'] = user.authentication_token
-
-    controller.instance_variable_set(:@current_user, user)
+    authenticate_user(user)
     allow(controller).to receive(:authorize!).and_return(true)
   end
 

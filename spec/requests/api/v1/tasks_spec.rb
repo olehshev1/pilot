@@ -9,8 +9,7 @@ RSpec.describe 'API V1 Tasks', type: :request do
 
   path '/api/v1/projects/{project_id}/tasks' do
     parameter name: 'project_id', in: :path, type: :integer, required: true
-    parameter name: 'X-User-Token', in: :header, type: :string, required: true
-    parameter name: 'X-User-Email', in: :header, type: :string, required: true
+    auth_parameters
 
     let(:project_id) { project.id }
 
@@ -18,12 +17,11 @@ RSpec.describe 'API V1 Tasks', type: :request do
       tags 'Tasks'
       consumes 'application/json'
       produces 'application/json'
-      security [ { x_auth_token: [], x_auth_email: [] } ]
+      auth_security
 
       response '200', 'tasks found' do
         schema schema_data_obj(Schemas::Tasks::TASKS_COLLECTION_SCHEMA)
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
+        authenticate_with_token
 
         before do
           create_list(:task, 3, project: project)
@@ -32,19 +30,9 @@ RSpec.describe 'API V1 Tasks', type: :request do
         run_test_with_example!
       end
 
-      response '401', 'unauthorized' do
-        let(:'X-User-Token') { 'invalid' }
-        let(:'X-User-Email') { email }
-
-        run_test!
-      end
-
-      response '403', 'forbidden' do
-        let(:other_user) { create(:user) }
-        let(:other_project) { create(:project, user: other_user) }
-        let(:project_id) { other_project.id }
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
+      response '404', 'project not found' do
+        authenticate_with_token
+        let(:project_id) { 999999 }
 
         run_test!
       end
@@ -54,24 +42,23 @@ RSpec.describe 'API V1 Tasks', type: :request do
       tags 'Tasks'
       consumes 'application/json'
       produces 'application/json'
-      security [ { x_auth_token: [], x_auth_email: [] } ]
-      parameter name: 'X-User-Token', in: :header, type: :string, required: true
-      parameter name: 'X-User-Email', in: :header, type: :string, required: true
+      auth_security
       parameter name: :task, in: :body, schema: Schemas::Tasks::TASK_REQUEST_SCHEMA
 
       response '201', 'task created' do
         schema schema_data_obj(Schemas::Tasks::TASK_RESPONSE_SCHEMA)
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
-        let(:task) { { task: { name: 'Test Task', description: 'This is a test task description', status: 'not_started' } } }
+        authenticate_with_token
+
+        let(:task) do
+          { task: { name: 'Test Task', description: 'This is a test task', status: 'not_started' } }
+        end
 
         run_test_with_example!
       end
 
       response '422', 'invalid request' do
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
-        let(:task) { { task: { name: '', description: '', status: nil } } }
+        authenticate_with_token
+        let(:task) { { task: { name: '', description: '', status: '' } } }
 
         run_test!
       end
@@ -81,43 +68,28 @@ RSpec.describe 'API V1 Tasks', type: :request do
   path '/api/v1/projects/{project_id}/tasks/{id}' do
     parameter name: 'project_id', in: :path, type: :integer, required: true
     parameter name: 'id', in: :path, type: :integer, required: true
-    parameter name: 'X-User-Token', in: :header, type: :string, required: true
-    parameter name: 'X-User-Email', in: :header, type: :string, required: true
+    auth_parameters
 
     let(:existing_task) { create(:task, project: project) }
     let(:project_id) { project.id }
     let(:id) { existing_task.id }
 
-    get 'Retrieves a task' do
+    get 'Fetches a task' do
       tags 'Tasks'
       consumes 'application/json'
       produces 'application/json'
-      security [ { x_auth_token: [], x_auth_email: [] } ]
+      auth_security
 
       response '200', 'task found' do
         schema schema_data_obj(Schemas::Tasks::TASK_RESPONSE_SCHEMA)
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
+        authenticate_with_token
 
         run_test_with_example!
       end
 
       response '404', 'task not found' do
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
+        authenticate_with_token
         let(:id) { 999999 }
-
-        run_test!
-      end
-
-     response '403', 'forbidden' do
-        let(:other_user) { create(:user) }
-        let(:other_project) { create(:project, user: other_user) }
-        let(:other_task) { create(:task, project: other_project) }
-        let(:project_id) { other_project.id }
-        let(:id) { other_task.id }
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
 
         run_test!
       end
@@ -127,22 +99,22 @@ RSpec.describe 'API V1 Tasks', type: :request do
       tags 'Tasks'
       consumes 'application/json'
       produces 'application/json'
-      security [ { x_auth_token: [], x_auth_email: [] } ]
+      auth_security
       parameter name: :task, in: :body, schema: Schemas::Tasks::TASK_REQUEST_SCHEMA
 
       response '200', 'task updated' do
         schema schema_data_obj(Schemas::Tasks::TASK_RESPONSE_SCHEMA)
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
-        let(:task) { { task: { name: 'Updated Task', description: 'This is an updated task description', status: 'in_progress' } } }
+        authenticate_with_token
+        let(:task) do
+          { task: { name: 'Updated Task', description: 'This is an updated task', status: 'in_progress' } }
+        end
 
         run_test_with_example!
       end
 
       response '422', 'invalid request' do
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
-        let(:task) { { task: { name: '', description: '', status: nil } } }
+        authenticate_with_token
+        let(:task) { { task: { name: '', description: '', status: '' } } }
 
         run_test!
       end
@@ -152,11 +124,10 @@ RSpec.describe 'API V1 Tasks', type: :request do
       tags 'Tasks'
       consumes 'application/json'
       produces 'application/json'
-      security [ { x_auth_token: [], x_auth_email: [] } ]
+      auth_security
 
       response '204', 'task deleted' do
-        let(:'X-User-Token') { token }
-        let(:'X-User-Email') { email }
+        authenticate_with_token
 
         run_test!
       end

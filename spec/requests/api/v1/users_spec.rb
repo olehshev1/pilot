@@ -59,12 +59,12 @@ RSpec.describe 'API V1 Users', type: :request do
     get 'Get the current user profile' do
       tags 'Users'
       produces 'application/json'
-      security [ { x_auth_token: [], x_auth_email: [] } ]
+      auth_security
+      auth_parameters
 
       response '200', 'user profile' do
         let(:user) { create(:user) }
-        let(:'X-User-Email') { user.email }
-        let(:'X-User-Token') { user.authentication_token }
+        authenticate_with_user
 
         let(:payload) do
           { "status"=>"success", "message"=>"User profile",
