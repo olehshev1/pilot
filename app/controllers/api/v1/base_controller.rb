@@ -1,19 +1,19 @@
 class Api::V1::BaseController < ApplicationController
+  include ApiExceptionHandler
+
   before_action :authenticate_user_from_token!
   attr_reader :current_user
+
+  def current_ability
+    @current_ability ||= Ability.new(current_user)
+  end
 
   private
 
   def authenticate_user_from_token!
-    email = request.headers['X-User-Email']
-    token = request.headers['X-User-Token']
+    authentication = BaseApplication::Authenticate.call(request.headers)
+    @current_user = authentication[:current_user]
 
-    user = User.find_by(email: email)
-
-    if user && Devise.secure_compare(user.authentication_token, token)
-      @current_user = user
-    else
-      render json: { error: 'Not Authorized' }, status: :unauthorized unless @current_user
-    end
+    render json: { error: 'Not Authorized' }, status: :unauthorized unless @current_user
   end
 end
