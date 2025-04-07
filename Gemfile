@@ -14,7 +14,7 @@ gem 'rswag-ui'
 gem 'cancancan', '~> 3.5'
 
 group :development do
-  gem 'brakeman', '7.0.0'
+  gem 'brakeman', '7.0.2'
   gem 'bundler-audit', '0.9.2'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'fasterer', '0.11.0', require: false
