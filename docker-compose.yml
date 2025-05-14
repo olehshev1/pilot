@@ -9,6 +9,13 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - '${EXTERNAL_DB_PORT:-5432}:5432'
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
   app:
     build:
       context: .
@@ -22,5 +29,10 @@ services:
       - '${RAILS_PORT:-3000}:${RAILS_PORT:-3000}'
     environment:
       - 'PORT=${RAILS_PORT:-3000}'
+      - 'REDIS_URL=redis://redis:6379/0'
     depends_on:
       - 'db'
+      - 'redis'
+
+volumes:
+  redis-data:

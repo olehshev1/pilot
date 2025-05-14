@@ -14,13 +14,14 @@ Rails.application.configure do
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local = false
+  config.action_controller.perform_caching = true
 
   # Ensures that a master key has been made available in ENV["RAILS_MASTER_KEY"], config/master.key, or an environment
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
   # config.require_master_key = true
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
-  # config.public_file_server.enabled = false
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -62,6 +63,17 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch('REDIS_URL') { 'redis://localhost:6379/0' },
+    connect_timeout: 30,
+    read_timeout: 0.5,
+    write_timeout: 0.5,
+    reconnect_attempts: 1,
+    pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i,
+    error_handler: ->(method:, returning:, exception:) {
+      Rails.logger.error "Redis error: #{exception}, on method: #{method}"
+    }
+  }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
