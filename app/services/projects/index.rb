@@ -49,13 +49,31 @@ module Projects
     end
 
     def cache_key
-      parts = [ 'projects', @user.id, @user.updated_at.to_s ]
+      [
+        base_key,
+        projects_signature,
+        filter_signature,
+        version_signature
+      ].compact.join(':')
+    end
 
-      if @params[:task_status].present?
-        parts << "task_status:#{@params[:task_status]}"
-      end
+    def base_key
+      [ 'projects', @user.id ].join(':')
+    end
 
-      parts.join(':')
+    def projects_signature
+      count = @user.projects.count
+      latest_update = @user.projects.maximum(:updated_at) || 'none'
+
+      "stats:count=#{count}:updated=#{latest_update}"
+    end
+
+    def filter_signature
+      "filter:#{@params[:task_status]}" if @params[:task_status].present?
+    end
+
+    def version_signature
+      'v1'
     end
   end
 end
