@@ -80,6 +80,7 @@ A robust RESTful API backend for managing projects and tasks. This application a
 1. Build and start the containers
 
    ```
+   docker compose build
    docker compose up
    ```
 
@@ -150,6 +151,42 @@ RAILS_ENV=test bundle exec rspec spec/requests/api/v1 --format Rswag::Specs::Swa
   - POST /api/v1/projects/:project_id/tasks - Create a new task
   - PUT /api/v1/tasks/:id - Update a task
   - DELETE /api/v1/tasks/:id - Delete a task
+
+## CURL example
+
+``` Register a new user
+curl -X 'POST' \
+  'http://localhost:3000/api/v1/users' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "user": {
+    "email": "user@example.com",
+    "password": "password",
+    "password_confirmation": "password"
+  }
+}'
+```
+
+```Sign in
+curl -X 'POST' \
+  'http://localhost:3000/api/v1/sign_in' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "email": "user@example.com",
+  "password": "password"
+}'
+```
+
+```Project list
+
+curl -X 'GET' \
+  'http://localhost:3000/api/v1/projects' \
+  -H 'accept: application/json' \
+  -H 'X-User-Token: <X_USER_TOKEN>' \
+  -H 'X-User-Email: <X_USER_EMAIL>'
+```
 
 ## Running Tests
 
