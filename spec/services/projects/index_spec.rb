@@ -105,16 +105,26 @@ RSpec.describe Projects::Index do
       service.call
     end
 
-    it 'builds unique cache key based on user and updated_at' do
+    it 'builds unique cache key based on user id' do
       key = service.send(:cache_key)
       expect(key).to include(user.id.to_s)
-      expect(key).to include(user.updated_at.to_s)
     end
 
     it 'builds unique cache key with task status when filtered' do
       service = described_class.new(user, { task_status: 'completed' })
       key = service.send(:cache_key)
-      expect(key).to include('task_status:completed')
+      expect(key).to include('filter:completed')
+    end
+
+    it 'includes the count of projects in the cache key' do
+      key = service.send(:cache_key)
+      expect(key).to include("stats:count=#{user.projects.count}")
+    end
+
+    it 'includes the latest project update timestamp in the cache key' do
+      latest_update = user.projects.maximum(:updated_at)
+      key = service.send(:cache_key)
+      expect(key).to include("stats:count=#{user.projects.count}:updated=#{latest_update || 'none'}")
     end
 
     it 'returns cached results on subsequent calls' do
@@ -132,24 +142,51 @@ RSpec.describe Projects::Index do
       service.call
     end
 
-    it 'invalidates cache when user is updated' do
+    it 'invalidates cache when a project is updated' do
+      service1 = described_class.new(user)
+      first_projects_signature = service1.send(:projects_signature)
+
+      project = user.projects.first
+      new_time = Time.now + 1.day
+      project.update_column(:updated_at, new_time)
+
+      service2 = described_class.new(user)
+      second_projects_signature = service2.send(:projects_signature)
+
+      expect(second_projects_signature).not_to eq(first_projects_signature)
+    end
+
+    it 'invalidates cache when a project is added' do
       service1 = described_class.new(user)
 
       first_key = service1.send(:cache_key)
-      allow(Rails.cache).to receive(:fetch).with(any_args).and_call_original
-      expect(Rails.cache).to receive(:fetch).with(first_key, hash_including(:expires_in))
       service1.call
 
-      future_time = Time.now + 1.day
-      user.update_column(:updated_at, future_time)
+      create(:project, user: user)
 
-      service2 = described_class.new(user.reload)
+      service2 = described_class.new(user)
       second_key = service2.send(:cache_key)
 
       expect(second_key).not_to eq(first_key)
+    end
 
-      expect(Rails.cache).to receive(:fetch).with(second_key, hash_including(:expires_in))
-      service2.call
+    it 'invalidates cache when a project is removed' do
+      service1 = described_class.new(user)
+
+      first_key = service1.send(:cache_key)
+      service1.call
+
+      user.projects.first.destroy
+
+      service2 = described_class.new(user)
+      second_key = service2.send(:cache_key)
+
+      expect(second_key).not_to eq(first_key)
+    end
+
+    it 'includes version in cache key for easy cache invalidation' do
+      key = service.send(:cache_key)
+      expect(key).to include('v1')
     end
   end
 end
