@@ -21,7 +21,7 @@ group :development do
   gem 'overcommit', '0.67.1', require: false
   gem 'rubocop', '1.75.5', require: false
   gem 'rubocop-performance', '1.23.1'
-  gem 'rubocop-rspec', '3.4.0', require: false
+  gem 'rubocop-rspec', '3.6.0', require: false
   gem 'rubocop-rails-omakase', require: false
 end
 
