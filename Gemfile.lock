@@ -324,8 +324,9 @@ GEM
       rubocop-minitest
       rubocop-performance
       rubocop-rails
-    rubocop-rspec (3.4.0)
-      rubocop (~> 1.61)
+    rubocop-rspec (3.6.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     ruby-progressbar (1.13.0)
     ruby_parser (3.21.1)
       racc (~> 1.5)
@@ -394,7 +395,7 @@ DEPENDENCIES
   rubocop-performance (= 1.23.1)
   rubocop-rails
   rubocop-rails-omakase
-  rubocop-rspec (= 3.4.0)
+  rubocop-rspec (= 3.6.0)
   shoulda-matchers
   simple_token_authentication (~> 1.18)
   simplecov (= 0.22.0)
