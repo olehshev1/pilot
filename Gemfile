@@ -12,7 +12,7 @@ gem 'simple_token_authentication', '~> 1.18'
 gem 'rswag-api'
 gem 'rswag-ui'
 gem 'cancancan', '~> 3.5'
-gem 'redis', '~> 5.1'
+gem 'redis', '~> 5.4'
 gem 'redis-rails', '~> 5.0'
 gem 'redis-actionpack', '~> 5.0'
 
