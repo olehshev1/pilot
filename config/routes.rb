@@ -11,6 +11,11 @@ Rails.application.routes.draw do
       resources :projects do
         resources :tasks
       end
+
+      # Search routes
+      get 'search', to: 'search#index'
+      get 'search/projects', to: 'search#projects'
+      get 'search/tasks', to: 'search#tasks'
     end
   end
 end

@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  include Searchable
+
   NAME_MIN_LENGTH = 5
   NAME_MAX_LENGTH = 20
   DESCRIPTION_MIN_LENGTH = 20
@@ -11,4 +13,19 @@ class Project < ApplicationRecord
   validates :description, presence: true, length: { minimum: DESCRIPTION_MIN_LENGTH, maximum: DESCRIPTION_MAX_LENGTH }
 
   validates_with ProjectDeletionValidator, on: :destroy
+
+  def as_indexed_json(_options = {})
+    {
+      name: name,
+      description: description,
+      user_id: user_id,
+      tasks_count: tasks_count,
+      created_at: created_at
+    }
+  end
+
+  mapping dynamic: 'false' do
+    indexes :name, type: 'text', analyzer: 'english'
+    indexes :description, type: 'text', analyzer: 'english'
+  end
 end

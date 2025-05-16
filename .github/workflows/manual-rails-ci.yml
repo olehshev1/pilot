@@ -23,6 +23,11 @@ on:
         required: true
         type: boolean
         default: true
+      with_elasticsearch:
+        description: 'Run with Elasticsearch (only affects RSpec)'
+        required: true
+        type: boolean
+        default: true
 
 jobs:
   setup:
@@ -138,6 +143,20 @@ jobs:
           --health-retries 5
         if: ${{ github.event.inputs.with_redis == 'true' }}
 
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1
+        ports:
+          - 9200:9200
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: false
+        options: >-
+          --health-cmd "curl http://localhost:9200/_cluster/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        if: ${{ github.event.inputs.with_elasticsearch == 'true' }}
+
     steps:
       - name: Check out Repository
         uses: actions/checkout@v4
@@ -155,6 +174,11 @@ jobs:
         continue-on-error: true
         if: ${{ github.event.inputs.with_redis == 'true' }}
 
+      - name: Check Elasticsearch connection
+        run: curl http://localhost:9200/_cluster/health
+        continue-on-error: true
+        if: ${{ github.event.inputs.with_elasticsearch == 'true' }}
+
       - name: Install PostgreSQL Dependencies
         run: sudo apt-get update && sudo apt-get install -y libpq-dev
 
@@ -168,12 +192,16 @@ jobs:
         env:
           RAILS_ENV: test
           REDIS_URL: ${{ github.event.inputs.with_redis == 'true' && 'redis://localhost:6379/0' || '' }}
+          ELASTICSEARCH_URL: ${{ github.event.inputs.with_elasticsearch == 'true' && 'http://localhost:9200' || '' }}
+          ELASTICSEARCH_HOST: localhost
 
       - name: Run RSpec
         run: bundle exec rspec
         env:
           RAILS_ENV: test
           REDIS_URL: ${{ github.event.inputs.with_redis == 'true' && 'redis://localhost:6379/0' || '' }}
+          ELASTICSEARCH_URL: ${{ github.event.inputs.with_elasticsearch == 'true' && 'http://localhost:9200' || '' }}
+          ELASTICSEARCH_HOST: localhost
 
       # Optional step to save test coverage report
       - name: Upload coverage reports

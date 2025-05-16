@@ -133,4 +133,92 @@ RSpec.describe 'API V1 Tasks', type: :request do
       end
     end
   end
+
+  path '/api/v1/search/tasks' do
+    get 'Search tasks' do
+      tags 'Search'
+      consumes 'application/json'
+      produces 'application/json'
+      auth_security
+      auth_parameters
+      parameter name: :q, in: :query, type: :string, required: true
+      parameter name: :project_id, in: :query, type: :integer, required: false
+      parameter name: :status, in: :query, type: :string, required: false
+
+      response '200', 'tasks found' do
+        authenticate_with_token
+        let(:q) { 'test' }
+        let!(:task) { create(:task, name: 'Test Task', description: 'Task Description', project:) }
+
+        before do
+          Task.create_index!
+          Task.import_data
+          Task.__elasticsearch__.refresh_index!
+          sleep 1
+        end
+
+        run_test_with_example! do
+          expect(json_response['tasks']).to be_present
+          expect(json_response['tasks'].first['name']).to eq('Test Task')
+        end
+      end
+
+      response '200', 'tasks filtered by project' do
+        authenticate_with_token
+        let(:q) { 'test' }
+        let(:project_id) { project.id }
+        let!(:task) { create(:task, name: 'Test Task', description: 'Task Description', project:) }
+
+        before do
+          Task.create_index!
+          Task.import_data
+          Task.__elasticsearch__.refresh_index!
+          sleep 1
+        end
+
+        run_test_with_example! do
+          expect(json_response['tasks']).to be_present
+          expect(json_response['tasks'].first['project_id']).to eq(project.id)
+        end
+      end
+
+      response '200', 'tasks filtered by status' do
+        authenticate_with_token
+        let(:q) { 'test' }
+        let(:status) { 'in_progress' }
+        let!(:task) { create(:task, name: 'Test Task', description: 'Task Description', project:, status: 'in_progress') }
+
+        before do
+          Task.create_index!
+          Task.import_data
+          Task.__elasticsearch__.refresh_index!
+          sleep 1
+        end
+
+        run_test_with_example! do
+          expect(json_response['tasks']).to be_present
+          expect(json_response['tasks'].first['status']).to eq('in_progress')
+        end
+      end
+
+      response '200', 'no tasks found' do
+        authenticate_with_token
+        let(:q) { 'nonexistent' }
+
+        run_test_with_example! do
+          expect(json_response['tasks']).to be_empty
+        end
+      end
+
+      response '401', 'unauthorized' do
+        let(:q) { 'test' }
+        let(:'X-User-Token') { 'invalid' }
+        let(:'X-User-Email') { email }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+  end
 end
