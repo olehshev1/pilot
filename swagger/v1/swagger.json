@@ -341,9 +341,6 @@
           },
           "404": {
             "description": "project not found"
-          },
-          "403": {
-            "description": "forbidden"
           }
         }
       },
@@ -462,6 +459,116 @@
         "responses": {
           "204": {
             "description": "project deleted"
+          }
+        }
+      }
+    },
+    "/api/v1/search/projects": {
+      "get": {
+        "summary": "Search projects",
+        "tags": [
+          "Search"
+        ],
+        "security": [
+          {
+            "x_auth_token": [],
+            "x_auth_email": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "X-User-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Email",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "no projects found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "projects": []
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/search": {
+      "get": {
+        "summary": "Search across all models",
+        "tags": [
+          "Search"
+        ],
+        "security": [
+          {
+            "x_auth_token": [],
+            "x_auth_email": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "X-User-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Email",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "no results found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "results": {
+                    "projects": [],
+                    "tasks": []
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
           }
         }
       }
@@ -1000,6 +1107,77 @@
         "responses": {
           "204": {
             "description": "task deleted"
+          }
+        }
+      }
+    },
+    "/api/v1/search/tasks": {
+      "get": {
+        "summary": "Search tasks",
+        "tags": [
+          "Search"
+        ],
+        "security": [
+          {
+            "x_auth_token": [],
+            "x_auth_email": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "X-User-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Email",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "project_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "no tasks found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "tasks": []
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
           }
         }
       }

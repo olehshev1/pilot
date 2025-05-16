@@ -15,6 +15,8 @@ gem 'cancancan', '~> 3.5'
 gem 'redis', '~> 5.1'
 gem 'redis-rails', '~> 5.0'
 gem 'redis-actionpack', '~> 5.0'
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
 
 group :development do
   gem 'brakeman', '7.0.2'
