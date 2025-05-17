@@ -22,7 +22,7 @@ group :development do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'fasterer', '0.11.0', require: false
   gem 'overcommit', '0.67.1', require: false
-  gem 'rubocop', '1.75.5', require: false
+  gem 'rubocop', '1.75.6', require: false
   gem 'rubocop-performance', '1.25.0'
   gem 'rubocop-rspec', '3.6.0', require: false
   gem 'rubocop-rails-omakase', require: false
