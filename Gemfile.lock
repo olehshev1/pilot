@@ -312,7 +312,7 @@ GEM
     rswag-ui (2.16.0)
       actionpack (>= 5.2, < 8.1)
       railties (>= 5.2, < 8.1)
-    rubocop (1.75.6)
+    rubocop (1.75.7)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -410,7 +410,7 @@ DEPENDENCIES
   rswag-api
   rswag-specs
   rswag-ui
-  rubocop (= 1.75.6)
+  rubocop (= 1.75.7)
   rubocop-performance (= 1.25.0)
   rubocop-rails
   rubocop-rails-omakase
