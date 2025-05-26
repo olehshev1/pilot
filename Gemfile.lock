@@ -89,7 +89,7 @@ GEM
     brakeman (7.0.2)
       racc
     builder (3.3.0)
-    bullet (8.0.6)
+    bullet (8.0.7)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     bundler-audit (0.9.2)
@@ -117,7 +117,7 @@ GEM
     dotenv-rails (3.1.8)
       dotenv (= 3.1.8)
       railties (>= 6.1)
-    drb (2.2.1)
+    drb (2.2.3)
     erubi (1.13.1)
     factory_bot (6.5.1)
       activesupport (>= 6.1.0)
