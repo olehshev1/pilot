@@ -29,7 +29,7 @@ group :development do
 end
 
 group :test do
-  gem 'rspec', '~> 3.10'
+  gem 'rspec', '~> 3.13'
   gem 'simplecov', '0.22.0', require: false
   gem 'rswag-specs'
 end
