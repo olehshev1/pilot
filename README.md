@@ -4,7 +4,7 @@ A robust RESTful API backend for managing projects and tasks. This application a
 
 # Detailed task description
 
-**GitHub:** [https://github.com/OlegShevtsov1/pilot/blob/develop/TASK_DEFINITION.md](https://github.com/OlegShevtsov1/pilot/blob/develop/TASK_DEFINITION.md)
+**GitHub:** [https://github.com/olehshev1/pilot/blob/develop/TASK_DEFINITION.md](https://github.com/olehshev1/pilot/blob/develop/TASK_DEFINITION.md)
 
 ## Repository
 
