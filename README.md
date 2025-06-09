@@ -4,15 +4,15 @@ A robust RESTful API backend for managing projects and tasks. This application a
 
 # Detailed task description
 
-**GitHub:** [https://github.com/olehshev1/pilot/blob/develop/TASK_DEFINITION.md](https://github.com/olehshev1/pilot/blob/develop/TASK_DEFINITION.md)
+**GitHub:** [pilot/blob/develop/TASK_DEFINITION.md](pilot/blob/develop/TASK_DEFINITION.md)
 
 ## Repository
 
-**GitHub:** [https://github.com/olehshev1/pilot](https://github.com/olehshev1/pilot)
+**GitHub:** [pilot](pilot)
 
 ## Project
 
-**GitHub:** [https://github.com/users/olehshev1/projects/11](https://github.com/users/olehshev1/projects/5)
+**GitHub:** [projects/11](projects/5)
 
 ## Features
 
@@ -33,33 +33,26 @@ A robust RESTful API backend for managing projects and tasks. This application a
 
 ## Local Setup
 
-1. Clone the repository
-
-   ```
-   git clone git@github.com:olehshev1/pilot.git
-   cd pilot
-   ```
-
-2. Install dependencies
+1. Install dependencies
 
    ```
    bundle install
    ```
 
-3. Setup environment variables
+2. Setup environment variables
 
    ```
    cp .env.example .env
    # Edit .env file with your database credentials
    ```
 
-4. Setup git hooks (optional)
+3. Setup git hooks (optional)
 
    ```
    overcommit --sign
    ```
-
-5. Setup database
+   
+4.Setup database
 
    ```
    rails db:create
@@ -67,13 +60,13 @@ A robust RESTful API backend for managing projects and tasks. This application a
    rails db:seed # Optional - adds sample data
    ```
 
-6. Start the server
+5. Start the server
 
    ```
    rails s -p 3000
    ```
 
-7. Access the API at http://localhost:3000
+6. Access the API at http://localhost:3000
 
 ## Docker Setup
 
@@ -87,19 +80,14 @@ A robust RESTful API backend for managing projects and tasks. This application a
 2. Setup the database
    ```
    docker compose run app rails db:create
-   docker compose run app rails db:migrate
+   docker compose run app rails db:environment:set RAILS_ENV=development
+   docker compose run app rake db:schema:load
    docker compose run app rails db:seed # Optional
    ```
 
 ## Docker Commands
 
 ```
-# Database commands
-docker compose run app rails db:create
-docker compose run app rails db:environment:set RAILS_ENV=development
-docker compose run app rake db:schema:load
-docker compose run app rake db:seed
-
 # Migration commands
 docker exec -it pilot-app-1 rails g migration description_of_change
 docker exec -it pilot-app-1 rails db:migrate
