@@ -140,9 +140,13 @@ RAILS_ENV=test bundle exec rspec spec/requests/api/v1 --format Rswag::Specs::Swa
   - PUT /api/v1/tasks/:id - Update a task
   - DELETE /api/v1/tasks/:id - Delete a task
 
+## Search Documentation
+
+For detailed information about the Elasticsearch integration, search capabilities, and example queries, see [Elasticsearch Documentation](docs/ELASTIC_SEARCH.md).
+
 ## CURL example
 
-``` Register a new user
+```Register a new user
 curl -X 'POST' \
   'http://localhost:3000/api/v1/users' \
   -H 'accept: application/json' \

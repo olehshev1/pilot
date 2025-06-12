@@ -14,7 +14,7 @@ services:
     ports:
       - '${REDIS_PORT:-6379}:6379'
     volumes:
-      - redis-data:/data
+      - ./tmp/redis:/data
     restart: unless-stopped
   app:
     build:
@@ -35,6 +35,40 @@ services:
     depends_on:
       - 'db'
       - 'redis'
+    networks:
+      - default
+      - elastic
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1
+    environment:
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - xpack.security.enabled=false
+      - logger.level=INFO
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - ./tmp/elasticsearch:/usr/share/elasticsearch/data
+      - ./log/elasticsearch:/usr/share/elasticsearch/logs
+    networks:
+      - elastic
 
-volumes:
-  redis-data:
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.1
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - LOGGING_DEST=file
+      - LOGGING_DEST_FILE=/usr/share/kibana/logs/kibana.log
+    volumes:
+      - ./log/kibana:/usr/share/kibana/logs
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+
+networks:
+  elastic:
+    driver: bridge

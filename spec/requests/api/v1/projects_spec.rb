@@ -115,4 +115,51 @@ RSpec.describe 'API V1 Projects', type: :request do
       end
     end
   end
+
+  path '/api/v1/search/projects' do
+    get 'Search projects' do
+      tags 'Search'
+      consumes 'application/json'
+      produces 'application/json'
+      auth_security
+      auth_parameters
+      parameter name: :q, in: :query, type: :string, required: true
+
+      response '200', 'projects found' do
+        authenticate_with_token
+        let(:q) { 'test' }
+        let!(:project) { create(:project,
+          name: 'Test Project',
+          description: 'Test Description with enough characters to meet the minimum length requirement',
+          user:) }
+
+        before do
+          Project.create_index!
+          Project.import_data
+          Project.__elasticsearch__.refresh_index!
+          sleep 2 # Increase wait time
+        end
+
+        run_test_with_example! do
+          expect(json_response['projects']).to be_present
+          expect(json_response['projects'].first['name']).to eq('Test Project')
+        end
+      end
+
+      response '200', 'no projects found' do
+        authenticate_with_token
+        let(:q) { 'nonexistent' }
+
+        before do
+          Project.create_index!
+          Project.import_data
+          sleep 1
+        end
+
+        run_test_with_example! do
+          expect(json_response['projects']).to be_empty
+        end
+      end
+    end
+  end
 end

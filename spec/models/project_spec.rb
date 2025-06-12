@@ -11,34 +11,34 @@ RSpec.describe Project, type: :model do
     it { is_expected.to validate_presence_of(:description) }
 
     # Name length validations
-    it { is_expected.to validate_length_of(:name).is_at_least(5) }
-    it { is_expected.to validate_length_of(:name).is_at_most(20) }
+    it { is_expected.to validate_length_of(:name).is_at_least(Project::NAME_MIN_LENGTH) }
+    it { is_expected.to validate_length_of(:name).is_at_most(Project::NAME_MAX_LENGTH) }
 
     # Description length validations
-    it { is_expected.to validate_length_of(:description).is_at_least(20) }
-    it { is_expected.to validate_length_of(:description).is_at_most(120) }
+    it { is_expected.to validate_length_of(:description).is_at_least(Project::DESCRIPTION_MIN_LENGTH) }
+    it { is_expected.to validate_length_of(:description).is_at_most(Project::DESCRIPTION_MAX_LENGTH) }
 
     context 'with invalid attributes' do
       it 'is invalid with a short name' do
-        project = build(:project, name: 'a' * 4)
+        project = build(:project, name: 'a' * (Project::NAME_MIN_LENGTH - 1))
         expect(project).not_to be_valid
         expect(project.errors[:name]).to include('is too short (minimum is 5 characters)')
       end
 
       it 'is invalid with a long name' do
-        project = build(:project, name: 'a' * 21)
+        project = build(:project, name: 'a' * (Project::NAME_MAX_LENGTH + 1))
         expect(project).not_to be_valid
         expect(project.errors[:name]).to include('is too long (maximum is 20 characters)')
       end
 
       it 'is invalid with a short description' do
-        project = build(:project, description: 'a' * 19)
+        project = build(:project, description: 'a' * (Project::DESCRIPTION_MIN_LENGTH - 1))
         expect(project).not_to be_valid
         expect(project.errors[:description]).to include('is too short (minimum is 20 characters)')
       end
 
       it 'is invalid with a long description' do
-        project = build(:project, description: 'a' * 121)
+        project = build(:project, description: 'a' * (Project::DESCRIPTION_MAX_LENGTH + 1))
         expect(project).not_to be_valid
         expect(project.errors[:description]).to include('is too long (maximum is 120 characters)')
       end
@@ -94,6 +94,30 @@ RSpec.describe Project, type: :model do
     context 'when project has no tasks' do
       it 'can be deleted' do
         expect { project.destroy }.to change(Project, :count).by(-1)
+      end
+    end
+  end
+
+  describe 'search functionality' do
+    let(:user) { create(:user) }
+    let!(:project) { create(:project,
+      name: 'Test Name',
+      description: 'Test Description with enough characters to meet the minimum length requirement of twenty',
+      user:) }
+
+    it_behaves_like 'searchable model', Project, { name: :name, description: :description }
+    it_behaves_like 'model search settings', Project, 'projects', %w[name description]
+
+    describe 'indexed json' do
+      it 'includes the correct fields' do
+        indexed_json = project.as_indexed_json
+        expect(indexed_json).to include(
+          name: project.name,
+          description: project.description,
+          user_id: project.user_id,
+          tasks_count: project.tasks_count,
+          created_at: project.created_at
+        )
       end
     end
   end
