@@ -30,6 +30,8 @@ services:
     environment:
       - 'PORT=${RAILS_PORT:-3000}'
       - 'REDIS_URL=redis://redis:6379/0'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - 'db'
       - 'redis'
