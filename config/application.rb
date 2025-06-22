@@ -32,5 +32,9 @@ module Pilot
     # Enable session middleware
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
+
+
+    # Remove DataDog Rack middleware to avoid duplication with Rails instrumentation
+    # config.middleware.delete Datadog::Tracing::Contrib::Rack::TraceMiddleware
   end
 end

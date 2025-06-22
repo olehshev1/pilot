@@ -16,6 +16,10 @@ services:
     volumes:
       - redis-data:/data
     restart: unless-stopped
+    labels:
+      com.datadoghq.ad.check_names: '["redisdb"]'
+      com.datadoghq.ad.init_configs: '[{}]'
+      com.datadoghq.ad.instances: '[{"host":"redis","port":6379}]'
   app:
     build:
       context: .
@@ -35,6 +39,30 @@ services:
     depends_on:
       - 'db'
       - 'redis'
+
+  dd-agent:
+    image: gcr.io/datadoghq/agent:7
+    environment:
+      - DD_API_KEY=${DD_API_KEY:-dummy_key_for_local_dev}
+      - DD_SITE=${DD_SITE:-datadoghq.eu}
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=false
+      - DD_PROCESS_AGENT_ENABLED=false
+      - DD_SKIP_SSL_VALIDATION=true
+      - DD_LOG_LEVEL=warn
+      - DD_ENV=${DD_ENV:-dev}
+      - DD_SERVICE=${DD_SERVICE:-pilot}
+      - DD_VERSION=${DD_VERSION:-0.1.0}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    ports:
+      - "8126:8126"  # APM tracing
+      - "8125:8125/udp"  # DogStatsD
+    restart: unless-stopped
 
 volumes:
   redis-data:
