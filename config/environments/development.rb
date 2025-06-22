@@ -80,4 +80,12 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
   end
+
+  # DataDog configuration
+  config.datadog_trace = {
+    enabled: true,
+    auto_instrument: true,
+    auto_instrument_redis: true,
+    auto_instrument_http: true
+  }
 end
