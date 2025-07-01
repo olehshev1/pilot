@@ -11,6 +11,19 @@ Rails.application.routes.draw do
       resources :projects do
         resources :tasks
       end
+
+      # OpenAI endpoints
+      namespace :openai do
+        post :chat
+      end
+
+      # Language Learning endpoints
+      namespace :language_learning do
+        post :translate_word
+        post :create_word_task
+        get :word_details, path: 'word_details/:id'
+        patch :advance_learning, path: 'advance_learning/:id'
+      end
     end
   end
 end

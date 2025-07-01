@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_13_171659) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_30_165458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_171659) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.integer "tasks_count", default: 0, null: false
+    t.string "source_language"
+    t.text "target_languages"
+    t.text "learning_context"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
@@ -31,6 +34,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_171659) do
     t.bigint "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "original_word"
+    t.text "translations"
+    t.text "examples"
+    t.string "learning_status"
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
 

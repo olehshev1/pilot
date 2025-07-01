@@ -9,6 +9,8 @@ RSpec.describe Project, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:description) }
+    it { is_expected.to validate_presence_of(:source_language) }
+    it { is_expected.to validate_inclusion_of(:source_language).in_array(Project::SUPPORTED_LANGUAGES) }
 
     # Name length validations
     it { is_expected.to validate_length_of(:name).is_at_least(5) }
@@ -42,6 +44,12 @@ RSpec.describe Project, type: :model do
         expect(project).not_to be_valid
         expect(project.errors[:description]).to include('is too long (maximum is 120 characters)')
       end
+
+      it 'is invalid with unsupported source language' do
+        project = build(:project, source_language: 'french')
+        expect(project).not_to be_valid
+        expect(project.errors[:source_language]).to include('is not included in the list')
+      end
     end
 
     context 'with valid attributes' do
@@ -64,6 +72,97 @@ RSpec.describe Project, type: :model do
         project = build(:project, description: 'a' * 120)
         expect(project).to be_valid
       end
+
+      it 'is valid with supported source language' do
+        project = build(:project, source_language: 'ukrainian')
+        expect(project).to be_valid
+      end
+    end
+  end
+
+  describe 'language learning functionality' do
+    let(:project) { build(:project, source_language: 'ukrainian', target_languages: '["english", "polish"]') }
+
+    describe '#target_languages_array' do
+      it 'parses JSON target languages' do
+        expect(project.target_languages_array).to eq(%w[english polish])
+      end
+
+      it 'returns default languages for blank target_languages' do
+        project.target_languages = nil
+        expect(project.target_languages_array).to eq(Project::DEFAULT_TARGET_LANGUAGES)
+      end
+
+      it 'returns default languages for invalid JSON' do
+        project.target_languages = 'invalid json'
+        expect(project.target_languages_array).to eq(Project::DEFAULT_TARGET_LANGUAGES)
+      end
+    end
+
+    describe '#target_languages_array=' do
+      it 'sets target languages as JSON' do
+        project.target_languages_array = %w[english polish]
+        expect(project.target_languages).to eq('["english","polish"]')
+      end
+    end
+
+    describe '#learning_session?' do
+      it 'returns true when source language and target languages are present' do
+        expect(project.learning_session?).to be true
+      end
+
+      it 'returns false when source language is blank' do
+        project.source_language = nil
+        expect(project.learning_session?).to be false
+      end
+
+      it 'returns false when target languages are empty' do
+        project.target_languages = '[]'
+        expect(project.learning_session?).to be false
+      end
+    end
+
+    describe '#supports_language?' do
+      it 'returns true for supported languages' do
+        expect(project.supports_language?('ukrainian')).to be true
+        expect(project.supports_language?('english')).to be true
+        expect(project.supports_language?('polish')).to be true
+      end
+
+      it 'returns false for unsupported languages' do
+        expect(project.supports_language?('french')).to be false
+      end
+
+      it 'handles symbol input' do
+        expect(project.supports_language?(:ukrainian)).to be true
+        expect(project.supports_language?(:french)).to be false
+      end
+    end
+
+    describe '#language_pair_name' do
+      it 'returns formatted language pair for learning sessions' do
+        expected = 'ukrainian → english, polish'
+        expect(project.language_pair_name).to eq(expected)
+      end
+
+      it 'returns generic name for non-learning sessions' do
+        project.source_language = nil
+        expect(project.language_pair_name).to eq('General Project')
+      end
+    end
+  end
+
+  describe 'constants' do
+    it 'defines supported languages' do
+      expect(Project::SUPPORTED_LANGUAGES).to eq(%w[ukrainian english polish])
+    end
+
+    it 'defines default source language' do
+      expect(Project::DEFAULT_SOURCE_LANGUAGE).to eq('ukrainian')
+    end
+
+    it 'defines default target languages' do
+      expect(Project::DEFAULT_TARGET_LANGUAGES).to eq(%w[english polish])
     end
   end
 
