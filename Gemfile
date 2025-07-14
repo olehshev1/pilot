@@ -22,7 +22,7 @@ group :development do
   gem 'bundler-audit', '0.9.2'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'fasterer', '0.11.0', require: false
-  gem 'overcommit', '0.67.1', require: false
+  gem 'overcommit', '0.68.0', require: false
   gem 'rubocop', '1.76.1', require: false
   gem 'rubocop-performance', '1.25.0'
   gem 'rubocop-rspec', '3.6.0', require: false

@@ -183,7 +183,7 @@ GEM
     nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    overcommit (0.67.1)
+    overcommit (0.68.0)
       childprocess (>= 0.6.3, < 6)
       iniparse (~> 1.4)
       rexml (>= 3.3.9)
@@ -404,7 +404,7 @@ DEPENDENCIES
   factory_bot_rails
   fasterer (= 0.11.0)
   listen
-  overcommit (= 0.67.1)
+  overcommit (= 0.68.0)
   pg (~> 1.1)
   puma (>= 5.0)
   rack-cors
