@@ -8,7 +8,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     # Use ALLOWED_ORIGINS from environment variables for all environments
-    origins ENV.fetch('ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+    origins ENV.fetch('ALLOWED_ORIGINS') { 'http://localhost:3000' }.split(',')
 
     resource '*',
       headers: :any,
