@@ -7,6 +7,7 @@ gem 'pg', '~> 1.1'
 gem 'dotenv-rails', '>= 3.1.1'
 gem 'puma', '>= 5.0'
 gem 'bootsnap', require: false
+gem 'rack-cors'
 gem 'devise', '~> 4.9'
 gem 'simple_token_authentication', '~> 1.18'
 gem 'rswag-api'
