@@ -18,7 +18,7 @@ gem 'redis-rails', '~> 5.0'
 gem 'redis-actionpack', '~> 5.0'
 
 group :development do
-  gem 'brakeman', '7.0.2'
+  gem 'brakeman', '7.1.0'
   gem 'bundler-audit', '0.9.2'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'fasterer', '0.11.0', require: false
