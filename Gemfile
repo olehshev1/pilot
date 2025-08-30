@@ -16,6 +16,7 @@ gem 'cancancan', '~> 3.5'
 gem 'redis', '~> 5.1'
 gem 'redis-rails', '~> 5.0'
 gem 'redis-actionpack', '~> 5.0'
+gem 'ruby-openai', '~> 8.1'
 
 group :development do
   gem 'brakeman', '7.0.2'
